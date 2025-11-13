@@ -1,0 +1,64 @@
+def energy_resolution_fit(energies_keV, fwhm, fwhm_err, detector):
+    """
+    Compute resolution R = ΔE / E (ΔE = FWHM).
+    Fit R^2 vs E to the model R^2 = α*E^-2 + b*E^-1 + c using lmfit.
+    Returns lmfit result object and arrays for plotting.
+    """
+    # Convert inputs
+    E = np.asarray(energies_keV, dtype=float)
+    if "BGO" in detector:
+        slope = 2.164658
+    elif "NaI" in detector:
+        slope = 2.053951
+    else:
+        slope = 0.075018
+    fwhm_keV = np.array(fwhm) * slope
+    fwhm_err_keV = np.array(fwhm_err) * slope
+    deltaE = np.asarray(fwhm_keV, dtype=float)
+    deltaE_err = np.asarray(fwhm_err_keV, dtype=float)
+
+    # Compute R^2 = (ΔE/E)^2
+    R = deltaE / E
+    R2 = R**2
+
+    # Define the model: R^2 = α*E^-2 + b*E^-1 + c
+    def model(E, alpha, b, c):
+        return alpha * E**(-2) + b * E**(-1) + c
+
+    # Build lmfit Model
+    gmodel = Model(model)
+
+    # Create parameters with initial guesses
+    params = gmodel.make_params(alpha=1.0, b=0.0, c=0.0001)
+    # Optional: you could set parameter bounds here, e.g.
+    # params['alpha'].min = 0
+
+    # Weighting: equivalent to sigma in curve_fit (inverse variance)
+    weights = 1.0 / (2.0 * deltaE_err / E)
+
+    # Perform fit
+    result = gmodel.fit(R2, params, E=E, weights=weights)
+
+    # Plot results
+    Efit = np.logspace(np.log10(min(E)*0.8), np.log10(max(E)*1.2), 300)
+    plt.figure(figsize=(7,5))
+    plt.scatter(E, R2, color='black', label='Data (R²)')
+    plt.plot(Efit, model(Efit, **result.best_values), '-r', label=f"Fit: α={result.best_values['alpha']:.3e}, "
+                       f"b={result.best_values['b']:.3e}, "
+                       f"c={result.best_values['c']:.3e}")
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.xlabel('Energy (keV)')
+    plt.ylabel('R² = (ΔE/E)²')
+    plt.legend()
+    plt.grid(alpha=0.3, which='both')
+    plt.title('Energy resolution fit (R² vs E)')
+    plt.show()
+
+    # Return useful results
+    return {
+        'fit_result': result,
+        'R2_data': (E, R2),
+        'best_values': result.best_values,
+        'stderr': {k: result.params[k].stderr for k in result.params}
+    }
