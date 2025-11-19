@@ -31,4 +31,4 @@ To successfully run the code, the following libraries must be installed in the p
 
 <ins>Output</ins>: Graphs of each element's spectrum with gaussian fits to photopeaks, graph of the detector's energy/channel calibration, graphs of the detector's intrinsic efficiency, absolute efficiency, and energy resolution as functions of peak energy, and a graph of Americium's efficiencies (intrinsic and absolute) as a function of off-angle response. 
 
-### Note: AI was used to help generate portions of the code. AI sections are referenced within script comments.
+### Note: AI was used to help generate portions of the code. AI sections are referenced within script comments and function doc strings.
