@@ -13,8 +13,10 @@ The main .py detector scripts (**BGO.py**, **CdTe.py**, and **NaI.py**) and the 
 The data processed by the scripts can be found within the folder **Data for Code** and must be downloaded within the directory you run the main scripts in. 
 
 To successfully run the code, the following libraries must be installed in the python environment:
+- argparse
 - numpy
-- matplotlib
+- matplotlib.pyplot
+- scipy
 - lmfit
 
 <ins>Suggested Procedure for Running the Code</ins>:
