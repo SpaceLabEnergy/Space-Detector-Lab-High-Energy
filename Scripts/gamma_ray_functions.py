@@ -343,6 +343,7 @@ def fitting_peaks(channels, counts, lower, upper, height, width, distance, title
     ax.set_ylabel("Counts/sec")
     ax.legend()
     ax.set_xlim(0, channel_max)
+    plt.savefig(f"{title}_fitted_peaks_{detector}.png")
     plt.show()
     
     # define expected gamma energies based on isotope name
@@ -432,6 +433,7 @@ def linear_fit_odr(energies, channels, channel_err, name):
     ax.set_xlabel(f"{name} Channels")
     ax.set_ylabel(f"{name} Energies (keV)")
     ax.legend()
+    plt.savefig(f"{name}_linear_calibration.png")
     plt.show()
 
     # Print results
@@ -549,6 +551,7 @@ def energy_resolution(channels, channel_errors, fwhm, fwhm_err, slope, slope_err
     plt.legend()
     plt.xscale("log")
     plt.yscale("log")
+    plt.savefig(f"{detector}_energy_resolution.png")
     plt.show()
     
     # Print results
@@ -868,7 +871,8 @@ def plot_efficiencies(detector, Am_results, Ba_results, Co_results, Cs_results):
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(label_a)
-
+    plt.savefig(f"{detector}_abs_eff_vs_energy.png")
+    plt.show()
 
     # Intrinsic vs Energies
     yval_i = Am_intr_eff + Ba_intr_eff + Co_intr_eff + Cs_intr_eff
@@ -880,6 +884,8 @@ def plot_efficiencies(detector, Am_results, Ba_results, Co_results, Cs_results):
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(label_i)
+    plt.savefig(f"{detector}_intr_eff_vs_energy.png")
+    plt.show()
     
     print(f"\nAbsolute and Intrinsic Efficiencies vs Energy for {detector}")
     print(f"--------------------------------")
@@ -934,6 +940,8 @@ def plot_CdTe_efficiencies(Am_results, Ba_results, Cs_results):
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(label_a)
+    plt.savefig("CdTe_abs_eff_vs_energy.png")
+    plt.show()
 
     # Intrinsic vs Energies
     yval_i = Am_intr_eff + Ba_intr_eff + Cs_intr_eff
@@ -945,6 +953,8 @@ def plot_CdTe_efficiencies(Am_results, Ba_results, Cs_results):
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(label_i)
+    plt.savefig("CdTe_intr_eff_vs_energy.png")
+    plt.show()
     
     # Print results
     print(f"\nAbsolute and Intrinsic Efficiencies vs Energy for CdTe")
@@ -1089,6 +1099,8 @@ def angle_efficiencies(detector, source_results_array, angle_array):
     ax.set_xlabel(f'{detector} Detector Angle off Normal (deg)')
     ax.set_ylabel(f'{detector} Absolute Efficiency')
     ax.set_title(f'{detector} Americium Absolute Efficiency vs Angle')
+    plt.savefig(f"{detector}_abs_eff_vs_angle.png")
+    plt.show()
 
     fig, ax = plt.subplots(figsize=(9,5))
     ax.plot(angle_array, intr_eff, '-o')
@@ -1096,6 +1108,8 @@ def angle_efficiencies(detector, source_results_array, angle_array):
     ax.set_xlabel(f'{detector} Detector Angle off Normal (deg)')
     ax.set_ylabel(f'{detector} Intrinsic Efficiency')
     ax.set_title(f'{detector} Americium Intrinsic Efficiency vs Angle')
+    plt.savefig(f"{detector}_intr_eff_vs_angle.png")
+    plt.show()
     
     print(f"\nAbsolute and Intrinsic Efficiencies vs Angle for {detector}")
     print(f"--------------------------------")
@@ -1104,3 +1118,4 @@ def angle_efficiencies(detector, source_results_array, angle_array):
         print(f"Intrinsic Efficiency  = {i:.3f}")
     
     return abs_eff, intr_eff
+
